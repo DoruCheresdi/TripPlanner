@@ -15,25 +15,4 @@ public class TripPlannerApplication {
     public static void main(String[] args) {
         SpringApplication.run(TripPlannerApplication.class, args);
     }
-
-    @Configuration
-    protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-        @Override
-        public void configure(WebSecurity web) throws Exception {
-            web
-                    .ignoring()
-                    .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**");
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .httpBasic()
-                    .and()
-                    .authorizeRequests()
-                    .antMatchers("/index.html", "/", "/home", "/login").permitAll()
-                    .anyRequest().authenticated();
-        }
-    }
 }
