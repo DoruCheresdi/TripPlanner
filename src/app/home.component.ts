@@ -8,10 +8,11 @@ import { HttpClient } from '@angular/common/http';
 export class HomeComponent {
 
     title = 'Demo';
-    greeting = {};
+    greeting : {id : string, content : string};
 
     constructor(private app: AppService, private http: HttpClient) {
-        http.get('resource').subscribe(data => this.greeting = data);
+        this.greeting = {id : "", content : ""};
+        http.get('resource').subscribe((data : any) => this.greeting = data);
     }
 
     authenticated() { return this.app.authenticated; }
