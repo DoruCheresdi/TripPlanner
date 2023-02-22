@@ -48,7 +48,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // permit those endpoints without authorization:
-                .antMatchers("/index.html", "/", "/home", "/login").permitAll()
+                .antMatchers("/index.html", "/", "/home", "/login", "/register").permitAll()
+                .antMatchers("/**.js", "/**.css", "/**.scss", "/**.ico").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -56,8 +57,8 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**");
+//    }
 }

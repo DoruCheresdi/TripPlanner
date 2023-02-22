@@ -1,0 +1,15 @@
+# How to run project:
+
+On Windows:
+./mvnw spring-boot:run
+
+To continuously build Angular project:
+./ng build --watch
+
+Folders for angular build output:
+
+"target/classes/static" - angular app will be
+updated while the spring app is running
+
+"src/main/resources/static" - angular will be updated
+once spring app is rerun
