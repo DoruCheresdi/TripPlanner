@@ -9,7 +9,8 @@ export class AppService {
     constructor(private http: HttpClient) {
     }
 
-    authenticate(credentials: { username: any; password: any; } | undefined, callback: { (): void; (): any; } | undefined) {
+    authenticate(credentials: { username: any; password: any; } | undefined,
+                 callback: { (): void; (): any; } | undefined) {
 
         const headers = new HttpHeaders(credentials ? {
             authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
