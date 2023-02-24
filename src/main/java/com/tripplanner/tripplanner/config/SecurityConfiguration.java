@@ -46,9 +46,10 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable();
         http.authorizeRequests()
                 // permit those endpoints without authorization:
-                .antMatchers("/index.html", "/", "/home", "/login", "/register").permitAll()
+                .antMatchers("/index.html", "/", "/home", "/login", "/register", "/devapi/register").permitAll()
                 .antMatchers("/**.js", "/**.css", "/**.scss", "/**.ico").permitAll()
                 .anyRequest()
                 .authenticated()

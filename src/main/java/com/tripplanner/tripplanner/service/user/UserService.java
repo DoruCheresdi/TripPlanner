@@ -20,10 +20,10 @@ public class UserService {
     }
 
     public User registerUser(User user) throws UserEmailNotUniqueException {
-        try {
-            return userRepository.save(user);
-        } catch (IllegalArgumentException e) {
+        encodePassword(user);
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new UserEmailNotUniqueException(user.getEmail());
         }
+        return userRepository.save(user);
     }
 }

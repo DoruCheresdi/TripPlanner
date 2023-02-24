@@ -12,7 +12,7 @@ export class HomeComponent {
 
     constructor(private app: AppService, private http: HttpClient) {
         this.greeting = {id : "", content : ""};
-        http.get('resource').subscribe((data : any) => this.greeting = data);
+        http.get('devapi/resource').subscribe((data : any) => this.greeting = data);
     }
 
     authenticated() { return this.app.authenticated; }

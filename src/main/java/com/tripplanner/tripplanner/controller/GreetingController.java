@@ -16,7 +16,7 @@ import java.util.UUID;
 @Controller
 public class GreetingController {
 
-    @GetMapping("/resource")
+    @GetMapping("/devapi/resource")
     @ResponseBody
     public Map<String, Object> home(Authentication authentication) {
         User user = ((CustomUserDetails)authentication.getPrincipal()).getUser();
@@ -26,11 +26,4 @@ public class GreetingController {
         return model;
     }
 
-    @GetMapping("/test")
-    @ResponseBody
-    public Map<String, Object> test() {
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("idRandom", UUID.randomUUID().toString());
-        return model;
-    }
 }

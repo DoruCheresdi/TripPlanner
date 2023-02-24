@@ -42,8 +42,8 @@ export class RegisterComponent {
       this.app.authenticated = false;
     }
 
-    this.http.post("/register", this.user).pipe(
-        catchError(this.handleError)
+    this.http.post("/devapi/register", this.user).pipe(
+        catchError(this.handleError.bind(this))
     )
         .subscribe((response) => {
       this.app.authenticate({email: this.user.email, password: this.user.password}, () => {

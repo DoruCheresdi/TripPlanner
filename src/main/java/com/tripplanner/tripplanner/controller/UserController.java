@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,12 +19,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @RequestMapping("/user")
+    @RequestMapping("/devapi/user")
     public Principal user(Principal user) {
         return user;
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/devapi/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public User registerUser(@RequestBody User user) throws UserEmailNotUniqueException {
         return userService.registerUser(user);
