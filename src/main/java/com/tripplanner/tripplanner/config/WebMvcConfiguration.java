@@ -14,6 +14,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         List<String> urlPatterns = List.of(
                 "/login",
+                "/register",
                 "/home",
                 "/another_route"
         );

@@ -1,5 +1,7 @@
-package com.tripplanner.tripplanner.entities.user;
+package com.tripplanner.tripplanner.service.user;
 
+import com.tripplanner.tripplanner.entities.user.CustomUserDetails;
+import com.tripplanner.tripplanner.entities.user.User;
 import com.tripplanner.tripplanner.repositories.AuthorityRepository;
 import com.tripplanner.tripplanner.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

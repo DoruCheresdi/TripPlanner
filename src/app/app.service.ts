@@ -9,11 +9,11 @@ export class AppService {
     constructor(private http: HttpClient) {
     }
 
-    authenticate(credentials: { username: any; password: any; } | undefined,
+    authenticate(credentials: { email: any; password: any; } | undefined,
                  callback: { (): void; (): any; } | undefined) {
 
         const headers = new HttpHeaders(credentials ? {
-            authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+            authorization : 'Basic ' + btoa(credentials.email + ':' + credentials.password)
         } : {});
 
         this.http.get('user', {headers: headers}).subscribe((response: any) => {
