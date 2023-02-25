@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '../app.service';
+import { AuthenticateService } from '../authenticate.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -10,7 +10,7 @@ export class HomeComponent {
     title = 'Demo';
     greeting : {id : string, content : string};
 
-    constructor(private app: AppService, private http: HttpClient) {
+    constructor(private app: AuthenticateService, private http: HttpClient) {
         this.greeting = {id : "", content : ""};
         http.get('devapi/resource').subscribe((data : any) => this.greeting = data);
     }

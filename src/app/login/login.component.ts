@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '../app.service';
+import { AuthenticateService } from '../authenticate.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ export class LoginComponent {
 
     credentials = {email: '', password: ''};
 
-    constructor(private app: AppService, private http: HttpClient, private router: Router) {
+    constructor(private app: AuthenticateService, private http: HttpClient, private router: Router) {
     }
 
     login() {

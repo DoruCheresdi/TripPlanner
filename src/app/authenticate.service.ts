@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
-export class AppService {
+export class AuthenticateService {
 
     authenticated = false;
 
@@ -24,6 +24,5 @@ export class AppService {
             }
             return callback && callback();
         });
-
     }
 }
