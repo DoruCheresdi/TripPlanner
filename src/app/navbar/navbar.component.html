@@ -13,6 +13,9 @@
                     <a class="nav-link active" routerLinkActive="active" routerLink="/login">Login</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link active" routerLinkActive="active" routerLink="/gmap">Gmap</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link active" [hidden]="authenticated()" routerLinkActive="active" routerLink="/register">Register</a>
                 </li>
                 <li class="nav-item" [hidden]="!authenticated()">
