@@ -13,6 +13,8 @@ import {
 } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RegisterComponent } from './register/register.component';
+import { MygmapComponent } from './mygmap/mygmap.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -29,7 +31,8 @@ const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home'},
   { path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent}
+  { path: 'register', component: RegisterComponent},
+  { path: 'gmap', component: MygmapComponent}
 ];
 
 @NgModule({
@@ -38,13 +41,15 @@ const routes: Routes = [
     HomeComponent,
     LoginComponent,
     NavbarComponent,
-    RegisterComponent
+    RegisterComponent,
+    MygmapComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
     BrowserModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    GoogleMapsModule
   ],
   providers: [AuthenticateService, { provide: HTTP_INTERCEPTORS, useClass: XhrInterceptor, multi: true }],
   bootstrap: [AppComponent]

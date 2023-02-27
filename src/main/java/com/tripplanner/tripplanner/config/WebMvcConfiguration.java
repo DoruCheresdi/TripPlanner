@@ -16,9 +16,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 "/login",
                 "/register",
                 "/home",
-                "/another_route"
+                "/gmap"
         );
 
+        // forward to frontend app at "/":
         urlPatterns.forEach(pattern -> registry.addViewController(pattern).setViewName("forward:/"));
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
