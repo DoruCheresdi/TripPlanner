@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     });
 
     loader.load().then(() => {
-      console.log("Google maps api has been loaded!")
+      console.log("Google maps api has been loaded!");
     });
   }
 }
