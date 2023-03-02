@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ApiLoadingService} from "../services/api-loading.service";
 
 @Component({
   selector: 'app-mygmap',
@@ -11,12 +12,19 @@ export class MygmapComponent implements OnInit {
   options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
     zoomControl: false,
-    scrollwheel: false,
+    scrollwheel: true,
     disableDoubleClickZoom: true,
     maxZoom: 15,
     minZoom: 8,
   };
   markers : any[] = [];
+
+  constructor(private api: ApiLoadingService) {
+  }
+
+  isApiLoaded() : boolean {
+    return this.api.isGoogleAPILoaded;
+  }
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition((position) => {

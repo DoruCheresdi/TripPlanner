@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {AuthenticateService} from "../authenticate.service";
+import {AuthenticateService} from "../services/authenticate.service";
 import {catchError, throwError} from "rxjs";
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticateService } from '../authenticate.service';
+import { AuthenticateService } from '../services/authenticate.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -10,11 +10,11 @@ export class LoginComponent {
 
     credentials = {email: '', password: ''};
 
-    constructor(private app: AuthenticateService, private http: HttpClient, private router: Router) {
+    constructor(private auth: AuthenticateService, private http: HttpClient, private router: Router) {
     }
 
     login() {
-        this.app.authenticate(this.credentials, () => {
+        this.auth.authenticate(this.credentials, () => {
             this.router.navigateByUrl('/');
         });
         return false;
