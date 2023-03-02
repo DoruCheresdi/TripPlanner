@@ -79,3 +79,4 @@ Thumbs.db
 src/main/resources/static/**
 src/main/resources/static/index.html
 src/app/apikey.ts
+src/main/java/com/tripplanner/tripplanner/secret/GoogleKey.java

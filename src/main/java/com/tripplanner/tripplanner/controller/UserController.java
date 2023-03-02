@@ -21,12 +21,14 @@ public class UserController {
 
     @RequestMapping("/devapi/user")
     public Principal user(Principal user) {
+
         return user;
     }
 
     @RequestMapping(value = "/devapi/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public User registerUser(@RequestBody User user) throws UserEmailNotUniqueException {
+
         return userService.registerUser(user);
     }
 }

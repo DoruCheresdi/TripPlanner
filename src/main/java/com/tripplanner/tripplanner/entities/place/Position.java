@@ -3,11 +3,9 @@ package com.tripplanner.tripplanner.entities.place;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-@Data
 @RequiredArgsConstructor
-public class Place {
+@Data
+public class Position {
 
-    private final Position position;
-
-    private final String name;
+    private final Float latitude, longitude;
 }

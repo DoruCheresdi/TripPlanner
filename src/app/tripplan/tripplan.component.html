@@ -10,3 +10,37 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+<div class="container" *ngIf="places.length > 0">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Position</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let place of places">
+            <td>{{place.name}} </td>
+            <td>{{place.position.latitude}} {{place.position.longitude}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<google-map
+        *ngIf="places.length > 0 && isApiLoaded()"
+        height="500px"
+        width="100%"
+        [zoom]="zoom"
+        [center]="center"
+        [options]="options">
+    <map-marker
+            *ngFor="let marker of markers"
+            [position]="marker.position"
+            [label]="marker.label"
+            [title]="marker.title"
+            [options]="marker.options"
+    >
+    </map-marker>
+</google-map>
