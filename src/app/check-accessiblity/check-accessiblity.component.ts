@@ -130,6 +130,14 @@ export class CheckAccessiblityComponent {
     placeReview2.isAccessible = this.isAccessible;
 
     this.http.post("/devapi/addreview", placeReview2).subscribe((response) => {
+      // send get request for latest review
+      const params = new HttpParams()
+          .set('placeName', this.selectedPlace);
+      this.latestReview = null;
+      // TODO: make sure placeName has no wierd letters (turkish, romanian):
+      this.http.get<PlaceReview>("/devapi/getlatestreview", { params: params }).subscribe((data : PlaceReview) => {
+        this.latestReview = data;
+      });
         });
   }
 
