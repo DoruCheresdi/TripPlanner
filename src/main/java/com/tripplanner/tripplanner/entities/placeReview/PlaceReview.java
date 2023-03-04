@@ -30,7 +30,6 @@ public class PlaceReview {
 
     private boolean isAccessible;
 
-
     public String getSinceCreatedString() {
         // get time since course has been created in pretty format:
         PrettyTime t = new PrettyTime(new Date(System.currentTimeMillis()));

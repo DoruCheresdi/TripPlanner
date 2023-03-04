@@ -30,7 +30,14 @@ public class PlaceReviewService {
         placeReview.updateCourseTimestamp();
 
         User user = userRepository.findByEmail(userEmail).get();
-        Place place = placeRepository.findByName(placeName).get();
+        Place place = placeRepository.findByName(placeName).orElseGet(() -> {
+            Place newPlace = new Place();
+            newPlace.setName(placeName);
+
+            // TODO add position for this new place
+            placeRepository.save(newPlace);
+            return newPlace;
+        });
 
         placeReview.setUser(user);
         placeReview.setPlace(place);
@@ -38,6 +45,12 @@ public class PlaceReviewService {
         placeReviewRepository.save(placeReview);
     }
 
+    /**
+     * Gets latest review from the database
+     * @param placeName
+     * @return
+     * @throws PlaceHasNoReviewsException
+     */
     public PlaceReview getLatestReview(String placeName) throws PlaceHasNoReviewsException {
         Place place = placeRepository.findByName(placeName)
                 .orElseThrow(() -> new PlaceHasNoReviewsException(placeName));

@@ -54,9 +54,7 @@ public class SecurityConfiguration {
                 .antMatchers("/**.js", "/**.css", "/**.scss", "/**.ico").permitAll()
                 .anyRequest()
                 .permitAll()
-                .and().csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+                .and().csrf().disable()
                 .httpBasic();
         return http.build();
     }

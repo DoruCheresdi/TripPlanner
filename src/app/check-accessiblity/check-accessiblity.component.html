@@ -1,5 +1,5 @@
 <p>Check if a place is Accessible:</p>
-<form role="form" (submit)="plantrip()">
+<form role="form" (submit)="showMarkers()" *ngIf="places.length === 0">
     <div class="form-group">
         <label for="lookingFor">What are you looking for?</label> <input type="text"
                                                                          class="form-control" id="lookingFor" name="lookingFor" [(ngModel)]="lookingFor"/>
@@ -16,13 +16,34 @@
         width="100%"
         [zoom]="zoom"
         [center]="center"
-        [options]="options">
+        [options]="options"
+        >
     <map-marker
             *ngFor="let marker of markers"
             [position]="marker.position"
             [label]="marker.label"
             [title]="marker.title"
             [options]="marker.options"
+            (mapClick)="clickedMarker(marker)"
     >
     </map-marker>
 </google-map>
+
+<form role="form" (submit)="changeAccesssibility()" *ngIf="hasSelectedPlace()">
+    <div class="form-group">
+        <label class="form-check-label" for="isAccessible">Is this place accessible? :{{selectedPlace}}</label>
+        <input type="checkbox" class="form-check-input" id="isAccessible" name="isAccessible" [(ngModel)]="isAccessible"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<div>
+    {{userMessage}}
+</div>
+<div *ngIf="latestReview !== null">
+    <p>
+        Place is accessible: {{latestReview.isAccessible}}
+    </p>
+    <p>
+        Last review is at: {{latestReview.createdAt}}
+    </p>
+</div>
