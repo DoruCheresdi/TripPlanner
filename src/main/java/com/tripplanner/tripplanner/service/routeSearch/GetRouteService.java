@@ -3,18 +3,14 @@ package com.tripplanner.tripplanner.service.routeSearch;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.tripplanner.tripplanner.entities.place.Place;
 import com.tripplanner.tripplanner.entities.place.Position;
 import com.tripplanner.tripplanner.entities.route.Route;
 import com.tripplanner.tripplanner.secret.GoogleKey;
+import com.tripplanner.tripplanner.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.RouteMatcher;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 @Service
 @Slf4j
 public class GetRouteService {
@@ -45,7 +41,7 @@ public class GetRouteService {
       }
 
       JsonNode routes = root.path("routes");
-      JsonNode info = ((ArrayNode) routes).get(0).path("legs").get(0);
+      JsonNode info = routes.get(0).path("legs").get(0);
 
       JsonNode start_location = info.path("start_location");
       JsonNode end_location = info.path("end_location");
@@ -58,17 +54,47 @@ public class GetRouteService {
 
       ArrayNode steps = (ArrayNode)info.path("steps");
 
+      boolean subwayRoute = true;
+
       for (JsonNode node : steps) {
           String type = node.path("travel_mode").asText();
 
-          if (type.equals("WALKING")) {
+          if (!type.equals("TRANSIT")) {
             continue;
           }
 
           // TODO: check for subways
-          // if (type.equals("TRANSIT") && ) {
+          String subway = node.path("html_instructions").asText();
 
-          // }
+          if (Utils.isAccessible(subway)) {
+              continue;
+          }
+
+          subwayRoute = false;
+          break;
+      }
+
+      if (!subwayRoute || !Utils.isAccessibleByExchange(steps)) {
+        googleURL = "https://maps.googleapis.com/maps/api/directions/json?";
+
+        googleURL = googleURL + "origin=" + location.replace(" ", "+");
+        googleURL = googleURL + "&destination=" + destination.replace(" ", "+");
+        googleURL = googleURL + "&mode=transit&dir_action=navigate&transit_mode=bus";
+        googleURL = googleURL + "&key=" + GoogleKey.googleKey;
+
+        log.info("Second request URL: {}", googleURL);
+
+        response = restTemplate.getForEntity(googleURL, String.class);
+        root = mapper.readTree(response.getBody());
+        status = root.path("status");
+
+        if (!status.asText().equals("OK")) {
+          throw new Exception();
+        }
+
+        routes = root.path("routes");
+        info = routes.get(0).path("legs").get(0);
+        path = info.path("overview_polyline").path("points").asText();
       }
 
       return new Route(path, start, end);
