@@ -2,6 +2,7 @@ package com.tripplanner.tripplanner.service.routeSearch;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.tripplanner.tripplanner.entities.place.Place;
 import com.tripplanner.tripplanner.entities.place.Position;
 import com.tripplanner.tripplanner.secret.GoogleKey;
@@ -24,8 +25,8 @@ public class GetRouteService {
 
     googleURL = googleURL + "origin=" + location.replace(" ", "+");
     googleURL = googleURL + "&destination=" + destination.replace(" ", "+");
+    googleURL = googleURL + "&mode=transit&dir_action=navigate&transit_mode=subway";
     googleURL = googleURL + "&key=" + GoogleKey.googleKey;
-    googleURL = googleURL + "&mode=transit";//&dir/_action=navigate&transit_mode=subway";
 
     log.info("Request URL: {}", googleURL);
 
@@ -42,9 +43,10 @@ public class GetRouteService {
       }
 
       JsonNode routes = root.path("routes");
-      JsonNode info = routes.path("0");
-      System.out.println(routes.path("overview_polyline").path("points").asText());
-      return routes.path("overview_polyline").path("points").asText();
+      JsonNode info = ((ArrayNode) routes).get(0);
+
+      System.out.println(info.path("overview_polyline").path("points").asText());
+      return info.path("overview_polyline").path("points").asText();
     } catch (Exception e) {
       e.printStackTrace();
       return null;

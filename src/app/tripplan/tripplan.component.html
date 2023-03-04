@@ -1,3 +1,6 @@
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyBX6JgWhA8vBqhxIqgK8EX7dWA4ftz4w14" async defer></script>
+
 <p>Plan your next city trip in Bucharest using semantic search:</p>
 <form role="form" (submit)="plantrip()">
     <div class="form-group">
@@ -22,6 +25,7 @@
   <button type="submit2" class="btn btn-primary">Submit</button>
 </form>
 
+
 <google-map
   *ngIf="routeFound && isApiLoaded()"
   #mapInstance="googleMap"
@@ -30,6 +34,8 @@
   [zoom]="zoom"
   [center]="center"
   [options]="options">
+  <map-polyline [options]="polylineOptions">
+  </map-polyline>
 </google-map>
 
 

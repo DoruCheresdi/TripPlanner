@@ -2,7 +2,6 @@ import {Component, ViewChild} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthenticateService} from "../services/authenticate.service";
 import {ApiLoadingService} from "../services/api-loading.service";
-import {GoogleMap} from "@angular/google-maps";
 
 
 @Component({
@@ -44,6 +43,7 @@ export class TripplanComponent {
   destination: string = "";
   path: string = "";
   @ViewChild(google.maps.Map) googleMap!: google.maps.Map;
+  polylineOptions: any;
   //-----
 
   constructor(private auth: AuthenticateService, private http: HttpClient, private api: ApiLoadingService) {
@@ -76,14 +76,17 @@ export class TripplanComponent {
       .set('destination', this.destination);
 
     this.routeFound = true;
-      this.http.get<string>("/devapi/findroute", {params: params}).subscribe( (data : string) => this.path = data);
+      this.http.get("/devapi/findroute", {params: params, responseType: 'text'}).subscribe( (data : string) => {this.path = data
+        /////---------------------
+          var polyline = new google.maps.Polyline({
+            path: google.maps.geometry.encoding.decodePath("uiyqBfb~zQgGwAgCtM}DfVpDrBeBbFqDjFmHfXkOzh@cKxNuGlW_BzSiJxZcBfHuS~NqK`Ia@lFgIpC{fAoDcW~BmEbBeqAmIaEoBgB{KB}J}OoJcBwAeHuAwDaBkCnCwKjLcNgBkIc@oDtD}EhG{GjAgVcDsN{Bm@|FaAvOiE|Va`@xw@}Jh]dPhcArEzQuIpXkMna@sDbPb@fGdDxE|O~E~ZzH`ThQtdA|jA|NfRxC~Jc@p[iEd`@WbSvKza@rTlf@~ArMfFtJrChOjQfM~JzX@~VnOn]g@jMcBdLkGzHg@|DyGfEcEjLgEvHaKoAgNiEoLsCoKUkUz@_CtBqI?eDhAeGeDsIRyK`IqIfIkPtEuUbNcLpOuPpZ]rHpHtQpLnOlEvIEpJfId[pShc@z@th@cLx@yNnGk`@rVsLfLm|@v|@_VxKgZ`XmR~VeH~^~@jIsAvLeD~LiCre@mGhP}Eda@D`YqBt[aIna@iI|Db@pENpDtAzCc@pG{@bFuQlGcLxGuUz@}PhBUhIcD`Eof@rMwUfEk^|Ck}@tFcMjDiP~GeN`RcF]}CxBmEc@{BvAoGdCsKpFmOgEuB\\eEjKjB~GwGvBiDsDgEyGwD`JeDTgCyGuCOcGvFmGzJeC_DwCa@WvM{@rC_CJuHoIiFEgBwC{HeJuCm@sAxAf@fFoBvBmDx@iNm@mCxD{DkAwMrDcJrF}IhSsDbB{D{AyY_CoK~AuP`@uPm@eKbC}Lq@eNsCeDeC_Jj@wIb@mEr@eHgBiGoKiGyJeDgI}CmHG{KiCyO}P}IgNkNaUoKkCkDYiB{Bg@sFwAaDeDsSwT}PY{KaEeIBqTfEiEeEgDkLyUyIkT}BoP{DyGiGwHiW{Is^kOiScLmTeIqGsPcTqD_FgMaDwNqMwOuVqHy\\yFkMmGwEaHeAqBmCr@aU_CiBoSpDyHBkH}Kc[kTq[mPyYiOyVyR_Sc\\{ZsRwfA{]wh@oPaNVyIiFeHKmE~AqAhEwNgDiNmFgL~H}Cs@oIxH{DRsFqG_FoA}GfEgP~MuFi@}Sh@yDdDgInBaGh@w[cCwH~AeGeFeLcUD_LkAiDwUaJuMXaQuGyBgB|LkLhL{JnPoGhIuQfACz@kEqCgBF}F~@qL{AaHa@qJCcHiAsBeH]{PiHeJoCu@{BxCwC[cFiVePaGt@}KoH_NyMyNiGyWwMeIgFiLmIod@lEoSaf@eIrF{@oG}C_@{B{CsEmAmDgCcAoL_AaFs@oCl@mD\\eMkHkFaJqFkEiPN}HrBvKdEzExA|FJJ")
+          });
 
-      console.log(this.path);
-    var polyline = new google.maps.Polyline({
-      path: google.maps.geometry.encoding.decodePath(this.path),
-    });
+          console.log(google.maps.geometry.encoding.decodePath(this.path));
+          polyline.setMap(this.googleMap);
+      });
 
-    polyline.setMap(this.googleMap);
+
   }
 
   plantrip() {
