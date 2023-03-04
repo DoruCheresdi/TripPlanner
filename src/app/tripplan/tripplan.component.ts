@@ -43,8 +43,7 @@ export class TripplanComponent {
   destination: string = "";
   path: string = "";
   vertices: any [] = [];
-  @ViewChild(google.maps.Map) googleMap!: google.maps.Map;
-
+  routeMarkers: any[] = [];
   //-----
 
   constructor(private auth: AuthenticateService, private http: HttpClient, private api: ApiLoadingService) {
@@ -65,24 +64,31 @@ export class TripplanComponent {
   }
 
 
-  ngAfterViewInit() {
-
-  }
-
-  
-
   findRoute() {
 
     const params = new HttpParams()
       .set('source', this.source)
       .set('destination', this.destination);
 
-
       this.http.get("/devapi/findroute", {params: params, responseType: 'text'}).subscribe( (data : string) => {this.path = data
         this.vertices = google.maps.geometry.encoding.decodePath(this.path);
       });
-
     this.routeFound = true;
+
+    /*this.routeMarkers.push({
+      position: { lat: place.position.latitude, lng: place.position.longitude },
+      label: {
+        color: 'blue',
+        text: 'Marker label ' + place.name,
+      }
+    });
+
+    this.routeMarkers.push({
+      position: { lat: place.position.latitude, lng: place.position.longitude },
+      label: {
+        color: 'blue',
+      }
+    });*/
   }
 
   plantrip() {
@@ -120,6 +126,19 @@ class Place {
   name: string = "";
 
   position: {
+    latitude: number,
+    longitude: number
+  } = {latitude: 1, longitude: 1}
+}
+
+class RouteAttributes {
+  path: string = "";
+  src: {
+    latitude: number,
+    longitude: number
+  } = {latitude: 1, longitude: 1}
+
+  dest: {
     latitude: number,
     longitude: number
   } = {latitude: 1, longitude: 1}
