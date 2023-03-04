@@ -7,7 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RouteController {
-  GetRouteService routeService;
+  private final GetRouteService routeService;
+
+  public RouteController(GetRouteService routeService) {
+    this.routeService = routeService;
+  }
+
   @GetMapping(value = "/devapi/findroute")
   public String getRoute(@RequestParam String source, @RequestParam String destination) {
 

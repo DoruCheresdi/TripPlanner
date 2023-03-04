@@ -1,14 +1,20 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthenticateService} from "../services/authenticate.service";
 import {ApiLoadingService} from "../services/api-loading.service";
+import {GoogleMap} from "@angular/google-maps";
+
 
 @Component({
   selector: 'app-tripplan',
   templateUrl: './tripplan.component.html',
   styleUrls: ['./tripplan.component.css']
 })
+
+
 export class TripplanComponent {
+
+
   zoom = 12;
   center: google.maps.LatLngLiteral = {lat: 23, lng: 23};
   options: google.maps.MapOptions = {
@@ -37,6 +43,7 @@ export class TripplanComponent {
   source : string = "";
   destination: string = "";
   path: string = "";
+  @ViewChild(google.maps.Map) googleMap!: google.maps.Map;
   //-----
 
   constructor(private auth: AuthenticateService, private http: HttpClient, private api: ApiLoadingService) {
@@ -57,16 +64,26 @@ export class TripplanComponent {
   }
 
 
+  ngAfterViewInit() {
+
+  }
+
+
   findRoute() {
 
     const params = new HttpParams()
       .set('source', this.source)
       .set('destination', this.destination);
 
+    this.routeFound = true;
       this.http.get<string>("/devapi/findroute", {params: params}).subscribe( (data : string) => this.path = data);
-      console.log(this.path);
 
-      this.routeFound = true;
+      console.log(this.path);
+    var polyline = new google.maps.Polyline({
+      path: google.maps.geometry.encoding.decodePath(this.path),
+    });
+
+    polyline.setMap(this.googleMap);
   }
 
   plantrip() {

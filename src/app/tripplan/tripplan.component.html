@@ -23,7 +23,8 @@
 </form>
 
 <google-map
-  *ngIf="routeFound"
+  *ngIf="routeFound && isApiLoaded()"
+  #mapInstance="googleMap"
   height="500px"
   width="100%"
   [zoom]="zoom"
