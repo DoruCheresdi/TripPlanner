@@ -32,6 +32,12 @@ export class TripplanComponent {
 
   places : Place[] = [];
 
+  ///  var pt ruta
+  routeFound : boolean = false;
+  destination: string = "";
+  path: string = "";
+  //-----
+
   constructor(private auth: AuthenticateService, private http: HttpClient, private api: ApiLoadingService) {
   }
 
@@ -47,6 +53,16 @@ export class TripplanComponent {
         lng: position.coords.longitude,
       };
     });
+  }
+
+
+  findRoute() {
+    const params = new HttpParams()
+      .set('', this.destination)
+      .set('lat', this.bucharestPos.lat)
+      .set('lng', this.bucharestPos.lng);
+
+      this.http.get<string>("/devapi/findroute", {params: params}).subscribe( (data : string) => this.path = data);
   }
 
   plantrip() {
