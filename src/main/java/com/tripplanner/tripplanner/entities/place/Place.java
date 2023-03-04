@@ -1,13 +1,36 @@
 package com.tripplanner.tripplanner.entities.place;
 
+import com.tripplanner.tripplanner.entities.placeReview.PlaceReview;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Place {
 
-    private final Position position;
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
 
-    private final String name;
+    public Place (Position position, String name) {
+        this.position = position;
+        this.name = name;
+    }
+
+    @Embedded
+    private Position position;
+
+
+    @Column(unique=true)
+    private String name;
+
+    @OneToMany
+    private List<PlaceReview> placeReview;
 }

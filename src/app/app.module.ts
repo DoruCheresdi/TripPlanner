@@ -16,6 +16,7 @@ import { RegisterComponent } from './register/register.component';
 import { MygmapComponent } from './mygmap/mygmap.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { TripplanComponent } from './tripplan/tripplan.component';
+import { CheckAccessiblityComponent } from './check-accessiblity/check-accessiblity.component';
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -34,7 +35,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
   { path: 'gmap', component: MygmapComponent},
-  { path: 'plantrip', component: TripplanComponent}
+  { path: 'plantrip', component: TripplanComponent},
+  { path: 'checkAccessibility', component: CheckAccessiblityComponent}
 ];
 
 @NgModule({
@@ -45,7 +47,8 @@ const routes: Routes = [
     NavbarComponent,
     RegisterComponent,
     MygmapComponent,
-    TripplanComponent
+    TripplanComponent,
+    CheckAccessiblityComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

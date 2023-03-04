@@ -53,7 +53,7 @@ public class SecurityConfiguration {
                 .antMatchers("/index.html", "/", "/devapi/register").permitAll()
                 .antMatchers("/**.js", "/**.css", "/**.scss", "/**.ico").permitAll()
                 .anyRequest()
-                .authenticated()
+                .permitAll()
                 .and().csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
