@@ -34,6 +34,7 @@ export class TripplanComponent {
 
   ///  var pt ruta
   routeFound : boolean = false;
+  source : string = "";
   destination: string = "";
   path: string = "";
   //-----
@@ -57,12 +58,15 @@ export class TripplanComponent {
 
 
   findRoute() {
+
     const params = new HttpParams()
-      .set('', this.destination)
-      .set('lat', this.bucharestPos.lat)
-      .set('lng', this.bucharestPos.lng);
+      .set('source', this.source)
+      .set('destination', this.destination);
 
       this.http.get<string>("/devapi/findroute", {params: params}).subscribe( (data : string) => this.path = data);
+      console.log(this.path);
+
+      this.routeFound = true;
   }
 
   plantrip() {
