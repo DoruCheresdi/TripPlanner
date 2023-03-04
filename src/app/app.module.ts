@@ -35,7 +35,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
   { path: 'gmap', component: MygmapComponent},
-  { path: 'plantrip', component: TripplanComponent},
+  { path: 'tripplan', component: TripplanComponent},
   { path: 'checkAccessibility', component: CheckAccessiblityComponent}
 ];
 
