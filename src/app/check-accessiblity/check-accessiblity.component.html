@@ -36,23 +36,29 @@
     </map-marker>
 </google-map>
 
-<form role="form" (submit)="changeAccesssibility()" *ngIf="hasSelectedPlace()">
-    <div class="form-group lead">
-        <label class="form-check-label" for="isAccessible">Is this place accessible? :{{selectedPlace}}</label>
-        <input type="checkbox" class="form-check-input" id="isAccessible" name="isAccessible" [(ngModel)]="isAccessible"/>
+<div class="row">
+    <div class="lead col-md-6" *ngIf="latestReview !== null">
+        <p>
+            Place is accessible: {{latestReview.isAccessible}}
+        </p>
+        <p>
+            Last review is at: {{latestReview.createdAt}}
+        </p>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-<div>
-    <p>
-        {{userMessage}}
-    </p>
-</div>
-<div class="lead" *ngIf="latestReview !== null">
-    <p>
-        Place is accessible: {{latestReview.isAccessible}}
-    </p>
-    <p>
-        Last review is at: {{latestReview.createdAt}}
-    </p>
+
+    <div class="lead col-md-6" *ngIf="latestReview === null">
+        <p>
+            {{userMessage}}
+        </p>
+    </div>
+    <div class="col-md-6">
+        <form role="form" (submit)="changeAccesssibility()" *ngIf="hasSelectedPlace()">
+            <div class="form-group lead">
+                <label class="form-check-label" for="isAccessible">Is this place accessible? :{{selectedPlace}}</label>
+                <input type="checkbox" class="form-check-input" id="isAccessible" name="isAccessible" [(ngModel)]="isAccessible"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
 </div>
