@@ -1,31 +1,31 @@
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar navbar-expand-lg bg-light position-absolute top-0 z-index-3 w-100 shadow-none my-3 navbar-transparent mt-4">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 text-white" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" routerLinkActive="active" routerLink="/home">Home</a>
+        <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0" id="navbarSupportedContent">
+            <ul class="navbar-nav navbar-nav-hover mx-auto">
+                <li class="nav-item " style="color: blue">
+                    <a class="nav-link active ps-2 d-flex justify-content-between cursor-pointer align-items-center" routerLinkActive="active" routerLink="/home">Home</a>
                 </li>
                 <li class="nav-item" [hidden]="authenticated()">
-                    <a class="nav-link active" routerLinkActive="active" routerLink="/login">Login</a>
+                    <a class="nav-link active ps-2 d-flex justify-content-between cursor-pointer align-items-center" routerLinkActive="active" routerLink="/login">Login</a>
                 </li>
                 <li class="nav-item" [hidden]="!authenticated()">
-                    <a class="nav-link active" routerLinkActive="active" routerLink="/gmap">Gmap</a>
+                    <a class="nav-link active ps-2 d-flex justify-content-between cursor-pointer align-items-center" routerLinkActive="active" routerLink="/gmap">Gmap</a>
                 </li>
                 <li class="nav-item" [hidden]="!authenticated()">
-                    <a class="nav-link active" routerLinkActive="active" routerLink="/tripplan">Get route</a>
+                    <a class="nav-link active ps-2 d-flex justify-content-between cursor-pointer align-items-center" routerLinkActive="active" routerLink="/tripplan">Get route</a>
                 </li>
                 <li class="nav-item" [hidden]="!authenticated()">
-                    <a class="nav-link active" routerLinkActive="active" routerLink="/checkAccessibility">Check a place</a>
+                    <a class="nav-link active ps-2 d-flex justify-content-between cursor-pointer align-items-center" routerLinkActive="active" routerLink="/checkAccessibility">Check a place</a>
                 </li>
                 <li class="nav-item" [hidden]="authenticated()">
-                    <a class="nav-link active"  routerLinkActive="active" routerLink="/register">Register</a>
+                    <a class="nav-link active ps-2 d-flex justify-content-between cursor-pointer align-items-center" routerLinkActive="active" routerLink="/register">Register</a>
                 </li>
                 <li class="nav-item" [hidden]="!authenticated()">
-                    <a class="nav-link active" (click)="logout()">Logout</a>
+                    <a class="nav-link active ps-2 d-flex justify-content-between cursor-pointer align-items-center" (click)="logout()">Logout</a>
                 </li>
             </ul>
         </div>

@@ -76,12 +76,20 @@ export class TripplanComponent {
       this.vertices = google.maps.geometry.encoding.decodePath(this.route.path);
       this.routeMarkers = [];
       this.routeMarkers.push({
-        position: { lat: this.route.src.latitude, lng: this.route.src.longitude },
+        position: { lat: this.route.start.latitude, lng: this.route.start.longitude },
         label: {
           color: 'blue',
-          text: 'Marker label ',
         }
       });
+
+      this.routeMarkers.push({
+        position: { lat: this.route.end.latitude, lng: this.route.end.longitude },
+        label: {
+          color: 'blue'
+        },
+
+      });
+
     });
     this.routeFound = true;
   }
@@ -128,12 +136,12 @@ class Place {
 
 class RouteAttributes {
   path: string = "";
-  src: {
+  start: {
     latitude: number,
     longitude: number
   } = {latitude: 1, longitude: 1}
 
-  dest: {
+  end: {
     latitude: number,
     longitude: number
   } = {latitude: 1, longitude: 1}
