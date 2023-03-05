@@ -2,7 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthenticateService} from "../services/authenticate.service";
 import {ApiLoadingService} from "../services/api-loading.service";
-
+import { faTrain} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-tripplan',
@@ -38,6 +38,7 @@ export class TripplanComponent {
   places : Place[] = [];
 
   ///  var pt ruta
+  routeDone: boolean = false;
   routeFound : boolean = false;
   source : string = "";
   destination: string = "";
@@ -45,6 +46,7 @@ export class TripplanComponent {
   vertices: any [] = [];
   routeMarkers: any[] = [];
   route : RouteAttributes | undefined;
+
   //-----
 
   constructor(private auth: AuthenticateService, private http: HttpClient, private api: ApiLoadingService) {
@@ -71,24 +73,38 @@ export class TripplanComponent {
       .set('source', this.source)
       .set('destination', this.destination);
 
+    const bus = "https://www.geocodezip.net/mapIcons/bus_blue.png";
+    const st = "https://www.geocodezip.net/mapIcons/geolocation_marker.png";
+    this.routeMarkers = [];
+
     this.http.get<RouteAttributes>("/devapi/findroute", {params: params}).subscribe( (data : RouteAttributes) => {
       this.route = data;
       this.vertices = google.maps.geometry.encoding.decodePath(this.route.path);
-      this.routeMarkers = [];
+
+
       this.routeMarkers.push({
         position: { lat: this.route.start.latitude, lng: this.route.start.longitude },
-        label: {
-          color: 'blue',
-        }
+        icon : st
       });
 
       this.routeMarkers.push({
         position: { lat: this.route.end.latitude, lng: this.route.end.longitude },
-        label: {
-          color: 'blue'
-        },
-
+        title: '',
       });
+      console.log("markers bf: " + JSON.stringify(this.routeMarkers));
+      console.log("stops: " +  this.route.stops.length);
+
+      this.route.stops.forEach(place => this.routeMarkers.push({
+        position: { lat: place.position.latitude, lng: place.position.longitude },
+        title: 'Metro ' + place.name,
+        label: {
+          color: 'blue',
+          text: 'Metro ' + place.name
+        },
+        icon : bus
+      }));
+      console.log("markers after: " +  JSON.stringify(this.routeMarkers));
+      this.routeDone = true;
 
     });
     this.routeFound = true;
@@ -145,4 +161,6 @@ class RouteAttributes {
     latitude: number,
     longitude: number
   } = {latitude: 1, longitude: 1}
+
+  stops: Place[] = [];
 }

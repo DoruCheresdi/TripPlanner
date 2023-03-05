@@ -3,6 +3,7 @@ package com.tripplanner.tripplanner.service.routeSearch;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.tripplanner.tripplanner.entities.place.Place;
 import com.tripplanner.tripplanner.entities.place.Position;
 import com.tripplanner.tripplanner.entities.route.Route;
 import com.tripplanner.tripplanner.secret.GoogleKey;
@@ -11,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+
 @Service
 @Slf4j
 public class GetRouteService {
@@ -51,14 +55,24 @@ public class GetRouteService {
 
       String path = poly.path("overview_polyline").path("points").asText();
 
-      log.info(path);
-
       ArrayNode steps = (ArrayNode)info.path("steps");
 
       boolean subwayRoute = true;
-
+      ArrayList<Place> stops = new ArrayList<>();
+      String prevType = "TRANSIT";
       for (JsonNode node : steps) {
           String type = node.path("travel_mode").asText();
+
+          if ((prevType.equals("WALKING") && type.equals("TRANSIT")) || (prevType.equals("TRANSIT") && type.equals("TRANSIT")) ) {
+
+            JsonNode details = node.path("transit_details").path("departure_stop");
+
+            log.info(details.path("location").path("lat").toString());
+            log.info(details.path("name").asText());
+            stops.add(new Place(new Position((float) details.path("location").path("lat").asDouble(), (float) details.path("location").path("lng").asDouble()), details.path("name").asText()));
+          }
+
+          prevType = node.path("travel_mode").asText();
 
           if (!type.equals("TRANSIT")) {
             continue;
@@ -100,10 +114,10 @@ public class GetRouteService {
         log.info(path);
       }
 
-      return new Route(path, start, end);
+      return new Route(path, start, end, stops);
     } catch (Exception e) {
       e.printStackTrace();
-      return new Route("", new Position(0f, 0f), new Position(0f, 0f));
+      return new Route("", new Position(0f, 0f), new Position(0f, 0f), new ArrayList<>());
     }
   }
 }

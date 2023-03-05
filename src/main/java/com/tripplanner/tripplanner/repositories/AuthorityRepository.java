@@ -1,6 +1,6 @@
 package com.tripplanner.tripplanner.repositories;
 
-import com.tripplanner.tripplanner.entities.authority.Authority;
+import com.tripplanner.tripplanner.entities.place.authority.Authority;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
