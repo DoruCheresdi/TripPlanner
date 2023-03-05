@@ -60,6 +60,8 @@ public class GetRouteService {
       boolean subwayRoute = true;
       ArrayList<Place> stops = new ArrayList<>();
       String prevType = "TRANSIT";
+
+      Place dropOff = null;
       for (JsonNode node : steps) {
           String type = node.path("travel_mode").asText();
 
@@ -67,6 +69,9 @@ public class GetRouteService {
 
             JsonNode details = node.path("transit_details").path("departure_stop");
             stops.add(new Place(new Position((float) details.path("location").path("lat").asDouble(), (float) details.path("location").path("lng").asDouble()), details.path("name").asText()));
+
+            JsonNode drop_details = node.path("transit_details").path("arrival_stop");
+            dropOff = new Place(new Position((float) drop_details.path("location").path("lat").asDouble(), (float) drop_details.path("location").path("lng").asDouble()), drop_details.path("name").asText());
           }
 
           prevType = node.path("travel_mode").asText();
@@ -85,9 +90,12 @@ public class GetRouteService {
           subwayRoute = false;
           break;
       }
+      if (dropOff != null)
+        stops.add(dropOff);
 
-      if (!subwayRoute || !Utils.isAccessibleByExchange(steps)) {
+      if (!subwayRoute || Utils.isAccessibleByExchange(steps)) {
         stops.clear();
+        dropOff = null;
         googleURL = "https://maps.googleapis.com/maps/api/directions/json?";
 
         googleURL = googleURL + "origin=" + location.replace(" ", "+");
@@ -118,8 +126,14 @@ public class GetRouteService {
 
             JsonNode details = node.path("transit_details").path("departure_stop");
             stops.add(new Place(new Position((float) details.path("location").path("lat").asDouble(), (float) details.path("location").path("lng").asDouble()), "BUS"));
+
+            JsonNode drop_details = node.path("transit_details").path("arrival_stop");
+            dropOff = new Place(new Position((float) drop_details.path("location").path("lat").asDouble(), (float) drop_details.path("location").path("lng").asDouble()), "BUS");
           }
         }
+
+        if (dropOff != null)
+          stops.add(dropOff);
 
       }
 
