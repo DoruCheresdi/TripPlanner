@@ -1,13 +1,15 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyBX6JgWhA8vBqhxIqgK8EX7dWA4ftz4w14" async defer></script>
 
-<p>Get your next city trip in Bucharest:</p>
+<div class="py-2">
+    <p class="lead">Get your next city trip in Bucharest:</p>
+</div>
 
 <form role="form" (submit)="findRoute()">
-  <div class="form-group">
+  <div class="form-group lead">
     <label for="source">Enter start point</label> <input type="text" class="form-control" id="source" name="source" [(ngModel)]="source"/>
   </div>
-  <div class="form-group">
+  <div class="py-2 form-group lead">
     <label for="destination">Where? (provide a landmark name, for example "Promenada" or "Victoriei")</label> <input type="text"
                                                                                                                       class="form-control" id="destination" name="destination" [(ngModel)]="destination"/>
   </div>

@@ -17,6 +17,7 @@ import { MygmapComponent } from './mygmap/mygmap.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { TripplanComponent } from './tripplan/tripplan.component';
 import { CheckAccessiblityComponent } from './check-accessiblity/check-accessiblity.component';
+import { FillComplaintComponent } from './fill-complaint/fill-complaint.component';
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -48,7 +49,8 @@ const routes: Routes = [
     RegisterComponent,
     MygmapComponent,
     TripplanComponent,
-    CheckAccessiblityComponent
+    CheckAccessiblityComponent,
+    FillComplaintComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

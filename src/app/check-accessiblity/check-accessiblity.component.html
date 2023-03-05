@@ -1,11 +1,13 @@
-<p>Check if a place is Accessible:</p>
+<div class="py-2 lead">
+    <p>Check the accesibility of your desired place</p>
+</div>
 <form role="form" (submit)="showMarkers()" *ngIf="places.length === 0">
-    <div class="form-group">
+    <div class="form-group lead">
         <label for="lookingFor">What are you looking for?</label> <input type="text"
                                                                          class="form-control" id="lookingFor" name="lookingFor" [(ngModel)]="lookingFor"/>
     </div>
-    <div class="form-group">
-        <label for="locationName">Where? (provide a landmark name, for example "Promenada" or "Victoriei")</label> <input type="text"
+    <div class="py-4 form-group lead">
+        <label for="locationName">Where? (provide a landmark name, for example "Mall Promenada" or "Piata Victoriei")</label> <input type="text"
                                                                                                                           class="form-control" id="locationName" name="locationName" [(ngModel)]="locationName"/>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -35,7 +37,7 @@
 </google-map>
 
 <form role="form" (submit)="changeAccesssibility()" *ngIf="hasSelectedPlace()">
-    <div class="form-group">
+    <div class="form-group lead">
         <label class="form-check-label" for="isAccessible">Is this place accessible? :{{selectedPlace}}</label>
         <input type="checkbox" class="form-check-input" id="isAccessible" name="isAccessible" [(ngModel)]="isAccessible"/>
     </div>
@@ -46,7 +48,7 @@
         {{userMessage}}
     </p>
 </div>
-<div *ngIf="latestReview !== null">
+<div class="lead" *ngIf="latestReview !== null">
     <p>
         Place is accessible: {{latestReview.isAccessible}}
     </p>
