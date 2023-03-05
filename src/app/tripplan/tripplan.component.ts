@@ -3,7 +3,6 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthenticateService} from "../services/authenticate.service";
 import {ApiLoadingService} from "../services/api-loading.service";
 
-
 @Component({
   selector: 'app-tripplan',
   templateUrl: './tripplan.component.html',
@@ -14,14 +13,14 @@ import {ApiLoadingService} from "../services/api-loading.service";
 export class TripplanComponent {
 
 
-  zoom = 12;
+  zoom = 11;
   center: google.maps.LatLngLiteral = {lat: 23, lng: 23};
   options: google.maps.MapOptions = {
-    mapTypeId: 'hybrid',
+    mapTypeId: 'terrain',
     zoomControl: false,
     scrollwheel: true,
     disableDoubleClickZoom: true,
-    maxZoom: 15,
+    maxZoom: 30,
     minZoom: 8,
   };
   public markers : any[] = [];
@@ -38,6 +37,7 @@ export class TripplanComponent {
   places : Place[] = [];
 
   ///  var pt ruta
+  routeDone: boolean = false;
   routeFound : boolean = false;
   source : string = "";
   destination: string = "";
@@ -45,6 +45,7 @@ export class TripplanComponent {
   vertices: any [] = [];
   routeMarkers: any[] = [];
   route : RouteAttributes | undefined;
+
   //-----
 
   constructor(private auth: AuthenticateService, private http: HttpClient, private api: ApiLoadingService) {
@@ -71,27 +72,53 @@ export class TripplanComponent {
       .set('source', this.source)
       .set('destination', this.destination);
 
+    const metro = "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png";
+    const bus = "https://www.geocodezip.net/mapIcons/bus_blue.png";
+    const st = "https://www.geocodezip.net/mapIcons/geolocation_marker.png";
+    this.routeMarkers = [];
+
     this.http.get<RouteAttributes>("/devapi/findroute", {params: params}).subscribe( (data : RouteAttributes) => {
       this.route = data;
       this.vertices = google.maps.geometry.encoding.decodePath(this.route.path);
-      this.routeMarkers = [];
+
+
       this.routeMarkers.push({
         position: { lat: this.route.start.latitude, lng: this.route.start.longitude },
+        icon : st
+      });
+
+      this.center.lat = (this.route.start.latitude + this.route.end.latitude)/2;
+      this.center.lng = (this.route.start.longitude + this.route.end.longitude)/2;
+
+        this.routeMarkers.push({
+        position: { lat: this.route.end.latitude, lng: this.route.end.longitude },
+        title: '',
+      });
+      this.route.stops.forEach((place) => {if (place.name === "BUS") {
+        this.routeMarkers.push({
+          position: { lat: place.position.latitude, lng: place.position.longitude },
+          title: place.name,
+          label: {
+            color: 'blue',
+            text: place.name
+          },
+          icon : bus})
+      } else { this.routeMarkers.push({
+        position: { lat: place.position.latitude, lng: place.position.longitude },
+        title:  'Metro ' + place.name,
         label: {
           color: 'blue',
-        }
-      });
-
-      this.routeMarkers.push({
-        position: { lat: this.route.end.latitude, lng: this.route.end.longitude },
-        label: {
-          color: 'blue'
+          text: 'Metro ' + place.name
         },
+        icon : metro
+      })}});
 
-      });
+      this.routeDone = true;
 
     });
     this.routeFound = true;
+
+
   }
 
   plantrip() {
@@ -113,14 +140,20 @@ export class TripplanComponent {
 
       // set markers:
       this.markers = [];
-      this.places.forEach(place => this.markers.push({
-        position: { lat: place.position.latitude, lng: place.position.longitude },
-        title: place.name,
-        label: {
-          color: 'red',
-          text: 'Marker label ' + place.name,
-        }
-      }))
+      this.places.forEach((place) =>
+      {if (place.name === "BUS") {
+
+      } else {
+        this.markers.push({
+          position: {lat: place.position.latitude, lng: place.position.longitude},
+          title: place.name,
+          label: {
+            color: 'red',
+            text: 'Marker label ' + place.name,
+          }
+        })
+      }})
+
     });
   }
 }
@@ -145,4 +178,6 @@ class RouteAttributes {
     latitude: number,
     longitude: number
   } = {latitude: 1, longitude: 1}
+
+  stops: Place[] = [];
 }
