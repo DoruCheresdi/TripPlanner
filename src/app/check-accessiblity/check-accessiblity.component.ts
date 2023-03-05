@@ -61,11 +61,8 @@ export class CheckAccessiblityComponent {
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       this.userMessage = 'An error occurred:' + error.error;
-      console.error('An error occurred:', error.error);
     } else {
-      this.userMessage = `Backend returned code ${error.status}, body was: ` + error.error;
-      console.error(
-          `Backend returned code ${error.status}, body was: `, error.error);
+      this.userMessage = error.error;
     }
     // Return an observable with a user-facing error message.
     return throwError(() => new Error('Something bad happened; please try again later.'));
@@ -113,7 +110,8 @@ export class CheckAccessiblityComponent {
 
     this.latestReview = null;
     // TODO: make sure placeName has no wierd letters (turkish, romanian):
-    this.http.get<PlaceReview>("/devapi/getlatestreview", { params: params }).subscribe((data : PlaceReview) => {
+    this.http.get<PlaceReview>("/devapi/getlatestreview", { params: params })
+        .pipe(catchError(this.handleError.bind(this))).subscribe((data : PlaceReview) => {
       this.latestReview = data;
     });
   }
