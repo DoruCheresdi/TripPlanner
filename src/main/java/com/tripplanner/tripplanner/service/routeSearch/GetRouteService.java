@@ -66,9 +66,6 @@ public class GetRouteService {
           if ((prevType.equals("WALKING") && type.equals("TRANSIT")) || (prevType.equals("TRANSIT") && type.equals("TRANSIT")) ) {
 
             JsonNode details = node.path("transit_details").path("departure_stop");
-
-            log.info(details.path("location").path("lat").toString());
-            log.info(details.path("name").asText());
             stops.add(new Place(new Position((float) details.path("location").path("lat").asDouble(), (float) details.path("location").path("lng").asDouble()), details.path("name").asText()));
           }
 
@@ -90,6 +87,7 @@ public class GetRouteService {
       }
 
       if (!subwayRoute || !Utils.isAccessibleByExchange(steps)) {
+        stops.clear();
         googleURL = "https://maps.googleapis.com/maps/api/directions/json?";
 
         googleURL = googleURL + "origin=" + location.replace(" ", "+");
@@ -111,7 +109,18 @@ public class GetRouteService {
         poly = ((ArrayNode) routes).get(0);
 
         path = poly.path("overview_polyline").path("points").asText();
-        log.info(path);
+
+        steps = (ArrayNode)routes.get(0).path("legs").get(0).path("steps");
+        prevType = "TRANSIT";
+        for (JsonNode node : steps) {
+          String type = node.path("travel_mode").asText();
+          if ((prevType.equals("WALKING") && type.equals("TRANSIT")) || (prevType.equals("TRANSIT") && type.equals("TRANSIT")) ) {
+
+            JsonNode details = node.path("transit_details").path("departure_stop");
+            stops.add(new Place(new Position((float) details.path("location").path("lat").asDouble(), (float) details.path("location").path("lng").asDouble()), "BUS"));
+          }
+        }
+
       }
 
       return new Route(path, start, end, stops);

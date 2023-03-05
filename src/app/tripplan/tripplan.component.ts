@@ -2,7 +2,6 @@ import {Component, ViewChild} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthenticateService} from "../services/authenticate.service";
 import {ApiLoadingService} from "../services/api-loading.service";
-import { faTrain} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-tripplan',
@@ -14,14 +13,14 @@ import { faTrain} from "@fortawesome/free-solid-svg-icons";
 export class TripplanComponent {
 
 
-  zoom = 12;
+  zoom = 11;
   center: google.maps.LatLngLiteral = {lat: 23, lng: 23};
   options: google.maps.MapOptions = {
-    mapTypeId: 'hybrid',
+    mapTypeId: 'terrain',
     zoomControl: false,
     scrollwheel: true,
     disableDoubleClickZoom: true,
-    maxZoom: 15,
+    maxZoom: 30,
     minZoom: 8,
   };
   public markers : any[] = [];
@@ -73,6 +72,7 @@ export class TripplanComponent {
       .set('source', this.source)
       .set('destination', this.destination);
 
+    const metro = "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png";
     const bus = "https://www.geocodezip.net/mapIcons/bus_blue.png";
     const st = "https://www.geocodezip.net/mapIcons/geolocation_marker.png";
     this.routeMarkers = [];
@@ -87,27 +87,38 @@ export class TripplanComponent {
         icon : st
       });
 
-      this.routeMarkers.push({
+      this.center.lat = (this.route.start.latitude + this.route.end.latitude)/2;
+      this.center.lng = (this.route.start.longitude + this.route.end.longitude)/2;
+
+        this.routeMarkers.push({
         position: { lat: this.route.end.latitude, lng: this.route.end.longitude },
         title: '',
       });
-      console.log("markers bf: " + JSON.stringify(this.routeMarkers));
-      console.log("stops: " +  this.route.stops.length);
-
-      this.route.stops.forEach(place => this.routeMarkers.push({
+      this.route.stops.forEach((place) => {if (place.name === "BUS") {
+        this.routeMarkers.push({
+          position: { lat: place.position.latitude, lng: place.position.longitude },
+          title: place.name,
+          label: {
+            color: 'blue',
+            text: place.name
+          },
+          icon : bus})
+      } else { this.routeMarkers.push({
         position: { lat: place.position.latitude, lng: place.position.longitude },
-        title: 'Metro ' + place.name,
+        title:  'Metro ' + place.name,
         label: {
           color: 'blue',
           text: 'Metro ' + place.name
         },
-        icon : bus
-      }));
-      console.log("markers after: " +  JSON.stringify(this.routeMarkers));
+        icon : metro
+      })}});
+
       this.routeDone = true;
 
     });
     this.routeFound = true;
+
+
   }
 
   plantrip() {
@@ -129,14 +140,20 @@ export class TripplanComponent {
 
       // set markers:
       this.markers = [];
-      this.places.forEach(place => this.markers.push({
-        position: { lat: place.position.latitude, lng: place.position.longitude },
-        title: place.name,
-        label: {
-          color: 'red',
-          text: 'Marker label ' + place.name,
-        }
-      }))
+      this.places.forEach((place) =>
+      {if (place.name === "BUS") {
+
+      } else {
+        this.markers.push({
+          position: {lat: place.position.latitude, lng: place.position.longitude},
+          title: place.name,
+          label: {
+            color: 'red',
+            text: 'Marker label ' + place.name,
+          }
+        })
+      }})
+
     });
   }
 }
