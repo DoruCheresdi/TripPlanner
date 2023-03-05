@@ -13,7 +13,7 @@ import {ApiLoadingService} from "../services/api-loading.service";
 export class TripplanComponent {
 
 
-  zoom = 11;
+  zoom = 10.5;
   center: google.maps.LatLngLiteral = {lat: 23, lng: 23};
   options: google.maps.MapOptions = {
     mapTypeId: 'terrain',
@@ -107,7 +107,7 @@ export class TripplanComponent {
         position: { lat: place.position.latitude, lng: place.position.longitude },
         title:  'Metro ' + place.name,
         label: {
-          color: 'blue',
+          color: 'black',
           text: 'Metro ' + place.name
         },
         icon : metro
