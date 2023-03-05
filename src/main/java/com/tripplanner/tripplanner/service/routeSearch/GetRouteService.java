@@ -41,16 +41,17 @@ public class GetRouteService {
       }
 
       JsonNode routes = root.path("routes");
-      JsonNode info = routes.get(0).path("legs").get(0);
+      JsonNode info = ((ArrayNode) routes).get(0).path("legs").get(0);
+      JsonNode poly = ((ArrayNode) routes).get(0);
 
       JsonNode start_location = info.path("start_location");
       JsonNode end_location = info.path("end_location");
       Position start = new Position((float) start_location.path("lat").asDouble(), (float) start_location.path("lng").asDouble());
       Position end = new Position((float) end_location.path("lat").asDouble(), (float) end_location.path("lng").asDouble());
 
-      String path = info.path("overview_polyline").path("points").asText();
+      String path = poly.path("overview_polyline").path("points").asText();
 
-      System.out.println(info.path("overview_polyline").path("points").asText());
+      log.info(path);
 
       ArrayNode steps = (ArrayNode)info.path("steps");
 
@@ -93,8 +94,10 @@ public class GetRouteService {
         }
 
         routes = root.path("routes");
-        info = routes.get(0).path("legs").get(0);
-        path = info.path("overview_polyline").path("points").asText();
+        poly = ((ArrayNode) routes).get(0);
+
+        path = poly.path("overview_polyline").path("points").asText();
+        log.info(path);
       }
 
       return new Route(path, start, end);

@@ -44,6 +44,7 @@ export class TripplanComponent {
   path: string = "";
   vertices: any [] = [];
   routeMarkers: any[] = [];
+  route : RouteAttributes | undefined;
   //-----
 
   constructor(private auth: AuthenticateService, private http: HttpClient, private api: ApiLoadingService) {
@@ -70,25 +71,19 @@ export class TripplanComponent {
       .set('source', this.source)
       .set('destination', this.destination);
 
-      this.http.get("/devapi/findroute", {params: params, responseType: 'text'}).subscribe( (data : string) => {this.path = data
-        this.vertices = google.maps.geometry.encoding.decodePath(this.path);
+    this.http.get<RouteAttributes>("/devapi/findroute", {params: params}).subscribe( (data : RouteAttributes) => {
+      this.route = data;
+      this.vertices = google.maps.geometry.encoding.decodePath(this.route.path);
+      this.routeMarkers = [];
+      this.routeMarkers.push({
+        position: { lat: this.route.src.latitude, lng: this.route.src.longitude },
+        label: {
+          color: 'blue',
+          text: 'Marker label ',
+        }
       });
-    this.routeFound = true;
-
-    /*this.routeMarkers.push({
-      position: { lat: place.position.latitude, lng: place.position.longitude },
-      label: {
-        color: 'blue',
-        text: 'Marker label ' + place.name,
-      }
     });
-
-    this.routeMarkers.push({
-      position: { lat: place.position.latitude, lng: place.position.longitude },
-      label: {
-        color: 'blue',
-      }
-    });*/
+    this.routeFound = true;
   }
 
   plantrip() {
