@@ -19,13 +19,18 @@
         [options]="options"
         >
     <map-marker
+            #markerrr="mapMarker"
             *ngFor="let marker of markers"
             [position]="marker.position"
             [label]="marker.label"
             [title]="marker.title"
             [options]="marker.options"
-            (mapClick)="clickedMarker(marker)"
+            (mapClick)="openInfoWindow(markerrr)"
     >
+        <map-info-window
+        (click)="clickedMarker(marker)">
+            Place: {{marker.title}}, click for accessiblity
+        </map-info-window>
     </map-marker>
 </google-map>
 
@@ -37,7 +42,9 @@
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 <div>
-    {{userMessage}}
+    <p>
+        {{userMessage}}
+    </p>
 </div>
 <div *ngIf="latestReview !== null">
     <p>
