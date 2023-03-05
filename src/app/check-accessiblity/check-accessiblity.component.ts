@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {AuthenticateService} from "../services/authenticate.service";
 import {ApiLoadingService} from "../services/api-loading.service";
 import {catchError, throwError} from "rxjs";
+import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 
 @Component({
   selector: 'app-check-accessiblity',
@@ -20,6 +21,9 @@ export class CheckAccessiblityComponent {
     maxZoom: 15,
     minZoom: 8,
   };
+
+  @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow | undefined;
+
   public markers : any[] = [];
 
   locationName : string = "";
@@ -92,10 +96,6 @@ export class CheckAccessiblityComponent {
       this.places.forEach(place => this.markers.push({
         position: { lat: place.position.latitude, lng: place.position.longitude },
         title: place.name,
-        label: {
-          color: 'blue',
-          text: place.name,
-        }
       }))
     });
   }
@@ -137,6 +137,10 @@ export class CheckAccessiblityComponent {
         this.latestReview = data;
       });
         });
+  }
+
+  openInfoWindow(marker: MapMarker) {
+    if (this.infoWindow != undefined) this.infoWindow.open(marker);
   }
 
   hello() {
