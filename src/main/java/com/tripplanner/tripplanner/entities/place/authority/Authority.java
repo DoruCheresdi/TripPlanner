@@ -1,4 +1,4 @@
-package com.tripplanner.tripplanner.entities.authority;
+package com.tripplanner.tripplanner.entities.place.authority;
 
 import com.tripplanner.tripplanner.entities.user.User;
 import lombok.Data;
