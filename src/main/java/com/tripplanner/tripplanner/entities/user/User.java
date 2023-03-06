@@ -1,6 +1,7 @@
 package com.tripplanner.tripplanner.entities.user;
 
-import com.tripplanner.tripplanner.entities.authority.Authority;
+import com.tripplanner.tripplanner.entities.place.authority.Authority;
+import com.tripplanner.tripplanner.entities.placeReview.PlaceReview;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,6 +25,8 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Set<Authority> authorities = new HashSet<>();
 
+    @OneToMany
+    private List<PlaceReview> placeReviews = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

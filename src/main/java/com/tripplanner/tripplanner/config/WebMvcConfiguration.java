@@ -17,7 +17,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 "/register",
                 "/home",
                 "/gmap",
-                "/plantrip"
+                "/plantrip", "/tripplan"
         );
 
         // forward to frontend app at "/":

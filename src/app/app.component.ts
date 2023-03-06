@@ -23,7 +23,9 @@ export class AppComponent implements OnInit {
     // Called after the constructor and called  after the first ngOnChanges()
     const loader = new Loader({
       apiKey: apikey,
+      libraries: ["geometry"],
       version: "weekly"
+      ,
     });
 
     loader.load().then(() => {

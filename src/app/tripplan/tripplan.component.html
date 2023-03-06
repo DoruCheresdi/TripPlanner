@@ -1,15 +1,42 @@
-<p>Plan your next city trip in Bucharest using semantic search:</p>
-<form role="form" (submit)="plantrip()">
-    <div class="form-group">
-        <label for="lookingFor">What are you looking for?</label> <input type="text"
-                                                    class="form-control" id="lookingFor" name="lookingFor" [(ngModel)]="lookingFor"/>
-    </div>
-    <div class="form-group">
-        <label for="locationName">Where? (provide a landmark name, for example "Promenada" or "Victoriei")</label> <input type="text"
-                                                       class="form-control" id="locationName" name="locationName" [(ngModel)]="locationName"/>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyBX6JgWhA8vBqhxIqgK8EX7dWA4ftz4w14" async defer></script>
+
+<p>Get your next city trip in Bucharest:</p>
+
+<form role="form" (submit)="findRoute()">
+  <div class="form-group">
+    <label for="source">Enter start point</label> <input type="text" class="form-control" id="source" name="source" [(ngModel)]="source"/>
+  </div>
+  <div class="form-group">
+    <label for="destination">Where? (provide a landmark name, for example "Promenada" or "Victoriei")</label> <input type="text"
+                                                                                                                      class="form-control" id="destination" name="destination" [(ngModel)]="destination"/>
+  </div>
+  <button type="submit2" class="btn btn-primary">Submit</button>
 </form>
+
+
+<google-map
+  *ngIf="routeFound && isApiLoaded() && routeDone"
+  #mapInstance="googleMap"
+  height="500px"
+  width="100%"
+  [zoom]="zoom"
+  [center]="center"
+  [options]="options">
+  <map-marker
+    *ngFor="let marker of routeMarkers"
+    [position]="marker.position"
+    [label]="marker.label"
+    [title]="marker.title"
+    [icon]="marker.icon"
+    [options]="marker.options"
+  >
+  </map-marker>
+  <map-polyline [path]="vertices"></map-polyline>
+
+
+</google-map>
+
 
 <div class="container" *ngIf="places.length > 0">
     <table class="table">
