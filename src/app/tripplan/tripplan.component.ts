@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, QueryList, ViewChildren} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthenticateService} from "../services/authenticate.service";
 import {ApiLoadingService} from "../services/api-loading.service";
+import {MapInfoWindow, MapMarker} from "@angular/google-maps";
 
 @Component({
   selector: 'app-tripplan',
@@ -12,7 +13,7 @@ export class TripplanComponent {
   zoom = 12;
   center: google.maps.LatLngLiteral = {lat: 23, lng: 23};
   options: google.maps.MapOptions = {
-    mapTypeId: 'hybrid',
+    mapTypeId: 'terrain',
     zoomControl: false,
     scrollwheel: true,
     disableDoubleClickZoom: true,
@@ -20,6 +21,8 @@ export class TripplanComponent {
     minZoom: 8,
   };
   public markers : any[] = [];
+
+  @ViewChildren(MapInfoWindow) infoWindows?: QueryList<MapInfoWindow>;
 
   locationName : string = "";
 
@@ -77,6 +80,18 @@ export class TripplanComponent {
         }
       }))
     });
+  }
+
+  clickedMarker(marker : any) {
+    console.log("clicked marker");
+  }
+
+  openInfoWindow(marker: MapMarker) {
+    // find the info window for this marker:
+    this.infoWindows?.find((infoWindow : MapInfoWindow) => {
+      return infoWindow.infoWindow?.getPosition()?.lng() === marker.marker?.getPosition()?.lng() &&
+          infoWindow.infoWindow?.getPosition()?.lat() === marker.marker?.getPosition()?.lat();
+    })?.open(marker);
   }
 }
 

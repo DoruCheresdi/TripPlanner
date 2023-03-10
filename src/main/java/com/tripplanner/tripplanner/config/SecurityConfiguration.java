@@ -49,6 +49,7 @@ public class SecurityConfiguration {
 //        http.csrf().disable();
         http.authorizeRequests()
                 // permit those endpoints without authorization:
+                .antMatchers("/plantrip").permitAll()
                 .antMatchers("/gmap", "/home", "/login", "/register").permitAll()
                 .antMatchers("/index.html", "/", "/devapi/register").permitAll()
                 .antMatchers("/**.js", "/**.css", "/**.scss", "/**.ico").permitAll()

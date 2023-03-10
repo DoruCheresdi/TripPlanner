@@ -5,7 +5,7 @@
                                                     class="form-control" id="lookingFor" name="lookingFor" [(ngModel)]="lookingFor"/>
     </div>
     <div class="form-group">
-        <label for="locationName">Where? (provide a landmark name, for example "Promenada" or "Victoriei")</label> <input type="text"
+        <label for="locationName">Where? (provide a landmark name, for example "Unirii" or "Victoriei")</label> <input type="text"
                                                        class="form-control" id="locationName" name="locationName" [(ngModel)]="locationName"/>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -36,11 +36,18 @@
         [center]="center"
         [options]="options">
     <map-marker
+            #markerelem="mapMarker"
             *ngFor="let marker of markers"
             [position]="marker.position"
             [label]="marker.label"
             [title]="marker.title"
             [options]="marker.options"
+            (mapClick)="openInfoWindow(markerelem)"
     >
+        <map-info-window
+                [position]="marker.position"
+                (click)="clickedMarker(marker)">
+            Hello Place: {{marker.title}}, click for accessiblity
+        </map-info-window>
     </map-marker>
 </google-map>
