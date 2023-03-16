@@ -69,8 +69,9 @@ export class TripplanComponent {
         this.center.lng = this.places[0].position.longitude;
       }
 
-      // set markers:
+      // reset markers
       this.markers = [];
+      // set markers:
       this.places.forEach(place => this.markers.push({
         position: { lat: place.position.latitude, lng: place.position.longitude },
         title: place.name,
@@ -88,6 +89,7 @@ export class TripplanComponent {
 
   openInfoWindow(marker: MapMarker) {
     // find the info window for this marker:
+    this.infoWindows?.forEach((infoWindow : MapInfoWindow) => infoWindow.close());
     this.infoWindows?.find((infoWindow : MapInfoWindow) => {
       return infoWindow.infoWindow?.getPosition()?.lng() === marker.marker?.getPosition()?.lng() &&
           infoWindow.infoWindow?.getPosition()?.lat() === marker.marker?.getPosition()?.lat();

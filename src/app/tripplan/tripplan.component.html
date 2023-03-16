@@ -28,14 +28,15 @@
     </table>
 </div>
 
-<google-map
-        *ngIf="places.length > 0 && isApiLoaded()"
-        height="500px"
-        width="100%"
-        [zoom]="zoom"
-        [center]="center"
-        [options]="options">
-    <map-marker
+<div class="py-5">
+    <google-map
+            *ngIf="places.length > 0 && isApiLoaded()"
+            height="500px"
+            width="100%"
+            [zoom]="zoom"
+            [center]="center"
+            [options]="options">
+        <map-marker
             #markerelem="mapMarker"
             *ngFor="let marker of markers"
             [position]="marker.position"
@@ -43,11 +44,13 @@
             [title]="marker.title"
             [options]="marker.options"
             (mapClick)="openInfoWindow(markerelem)"
-    >
-        <map-info-window
-                [position]="marker.position"
-                (click)="clickedMarker(marker)">
-            Hello Place: {{marker.title}}, click for accessiblity
-        </map-info-window>
-    </map-marker>
-</google-map>
+        >
+            <map-info-window
+                    [position]="marker.position"
+                    (click)="clickedMarker(marker)">
+                Hello Place: {{marker.title}}, click for accessiblity
+            </map-info-window>
+        </map-marker>
+    </google-map>
+
+</div>
