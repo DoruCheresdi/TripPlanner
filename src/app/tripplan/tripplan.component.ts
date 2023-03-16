@@ -2,7 +2,7 @@ import {Component, QueryList, ViewChildren} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {AuthenticateService} from "../services/authenticate.service";
 import {ApiLoadingService} from "../services/api-loading.service";
-import {MapInfoWindow, MapMarker} from "@angular/google-maps";
+import {GoogleMap, MapInfoWindow, MapMarker} from "@angular/google-maps";
 
 @Component({
   selector: 'app-tripplan',
@@ -24,16 +24,25 @@ export class TripplanComponent {
 
   @ViewChildren(MapInfoWindow) infoWindows?: QueryList<MapInfoWindow>;
 
+  @ViewChildren(GoogleMap) map?: GoogleMap;
+
   locationName : string = "";
 
   lookingFor : string = "";
+
+  hasChosenStart : boolean = false;
+  hasConfirmedStart : boolean = false;
 
   bucharestPos = {
     lat: 44.43,
     lng: 26.09
   };
 
+  public startMapMarker : any;
+
   places : Place[] = [];
+
+  startingPlace : Place | undefined;
 
   constructor(private auth: AuthenticateService, private http: HttpClient, private api: ApiLoadingService) {
   }
@@ -52,7 +61,38 @@ export class TripplanComponent {
     });
   }
 
-  plantrip() {
+  // add the starting location by
+  addStart(map : GoogleMap, event : any) {
+    this.startingPlace = {
+      name : "starting location",
+      position : {
+        latitude : event.latLng.lat(),
+        longitude : event.latLng.lng()
+      }
+    }
+    const pinViewBackground = new google.maps.marker.PinView({
+      background: '#FBBC04',
+    });
+    this.startMapMarker = {
+      position: { lat: this.startingPlace.position.latitude, lng: this.startingPlace.position.longitude },
+      title: this.startingPlace.name,
+      label: {
+        color: 'red',
+        text: 'S',
+      },
+      content: pinViewBackground.element
+    }
+    this.hasChosenStart = true;
+
+    // open info window:
+    this.infoWindows?.forEach((infoWindow) => infoWindow.open())
+  }
+
+  confirmStart() {
+    this.hasConfirmedStart = true;
+  }
+
+  planTrip() {
     // send get request for the places, await response and redirect to results
     const params = new HttpParams()
         .set('landmarkName', this.locationName)

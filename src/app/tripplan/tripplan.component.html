@@ -1,5 +1,24 @@
-<p>Plan your next city trip in Bucharest using semantic search:</p>
-<form role="form" (submit)="plantrip()">
+<p>Plan your next city trip in Bucharest:</p>
+<p *ngIf="!hasConfirmedStart">Choose your starting location:</p>
+<div class="py-5" *ngIf="!hasConfirmedStart">
+    <google-map
+            #map="googleMap"
+            *ngIf="isApiLoaded()"
+            height="500px"
+            width="100%"
+            [zoom]="zoom"
+            [center]="center"
+            [options]="options"
+            (mapClick)="addStart(map, $event)">
+        <map-info-window
+                [position]="startMapMarker.position"
+                (click)="confirmStart()">
+            Click to confirm starting location
+        </map-info-window>
+    </google-map>
+</div>
+
+<form role="form" (submit)="planTrip()" *ngIf="hasConfirmedStart">
     <div class="form-group">
         <label for="lookingFor">What are you looking for?</label> <input type="text"
                                                     class="form-control" id="lookingFor" name="lookingFor" [(ngModel)]="lookingFor"/>
@@ -10,23 +29,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-<div class="container" *ngIf="places.length > 0">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Position</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let place of places">
-            <td>{{place.name}} </td>
-            <td>{{place.position.latitude}} {{place.position.longitude}}</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
 
 <div class="py-5">
     <google-map
@@ -51,6 +53,30 @@
                 Hello Place: {{marker.title}}, click for accessiblity
             </map-info-window>
         </map-marker>
+        <map-marker
+            #markerelem="mapMarker"
+            [position]="startMapMarker.position"
+            [label]="startMapMarker.label"
+            [title]="startMapMarker.title"
+            [options]="startMapMarker.options"
+            (mapClick)="openInfoWindow(markerelem)">
+        </map-marker>
     </google-map>
+</div>
 
+<div class="container" *ngIf="places.length > 0">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Position</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let place of places">
+            <td>{{place.name}} </td>
+            <td>{{place.position.latitude}} {{place.position.longitude}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
